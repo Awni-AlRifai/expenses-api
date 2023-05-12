@@ -9,7 +9,7 @@
 /backend/yarn-error.log
 /backend/hot
 /backend/storage/*.key
-/backend/public/build
+/backend/public/build   
 /backend/public/hot
 /backend/public/storage
 /backend/.fleet
