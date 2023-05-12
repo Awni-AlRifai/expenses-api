@@ -42,5 +42,9 @@ RUN a2enmod rewrite
 # Expose port
 EXPOSE 8000
 
-# Start Apache service
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Create and set permissions for the run script
+RUN echo "#!/bin/bash\nphp artisan migrate && php artisan serve --host=0.0.0.0 --port=8000" > /var/www/html/run.sh && \
+    chmod +x /var/www/html/run.sh
+
+# Start Apache and the Laravel app with the run script
+CMD ["/var/www/html/run.sh"]
