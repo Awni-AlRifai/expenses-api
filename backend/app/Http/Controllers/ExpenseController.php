@@ -99,4 +99,32 @@ class ExpenseController extends Controller
             'message' => 'Expense deleted successfully',
         ]);
     }
+
+    public function indexByDay(Request $request)
+    {
+        $expenses = Expense::where('user_id', auth()->user()->id)
+            ->whereDate('spending_date', $request->date)
+            ->get();
+
+        return response()->json(['expenses' => $expenses]);
+    }
+
+    public function indexByMonth(Request $request)
+    {
+        $expenses = Expense::where('user_id', auth()->user()->id)
+            ->whereYear('spending_date', $request->year)
+            ->whereMonth('spending_date', $request->month)
+            ->get();
+
+        return response()->json(['expenses' => $expenses]);
+    }
+
+    public function indexByYear(Request $request)
+    {
+        $expenses = Expense::where('user_id', auth()->user()->id)
+            ->whereYear('spending_date', $request->year)
+            ->get();
+
+        return response()->json(['expenses' => $expenses]);
+    }
 }

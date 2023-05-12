@@ -92,5 +92,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Delete a specific expense for authenticated user
     Route::delete('/expenses/{expense}', 'App\Http\Controllers\ExpenseController@destroy');
-});
+    
+    // Get expenses by day for authenticated user
+    Route::get('/expenses/day/{date}', 'App\Http\Controllers\ExpenseController@indexByDay');
 
+    // Get expenses by month for authenticated user
+    Route::get('/expenses/month/{year}/{month}', 'App\Http\Controllers\ExpenseController@indexByMonth');
+
+    // Get expenses by year for authenticated user
+    Route::get('/expenses/year/{year}', 'App\Http\Controllers\ExpenseController@indexByYear');
+});
