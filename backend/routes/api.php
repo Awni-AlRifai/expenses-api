@@ -5,13 +5,19 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Validation\ValidationException;
 
-Route::post('register', function(Request $request) {
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|confirmed|min:8',    
-    ]);
+Route::post('register', function (Request $request) {
+    try {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|confirmed|min:8',
+        ]);
+    } catch (ValidationException $e) {
+        return response()->json(['errors' => $e->errors()], 422);
+    }
+
 
     $user = User::create([
         'name' => $validatedData['name'],
@@ -27,7 +33,7 @@ Route::post('register', function(Request $request) {
     ], 201);
 });
 
-Route::post('login', function(Request $request) {
+Route::post('login', function (Request $request) {
     $validatedData = $request->validate([
         'email' => 'required|string|email|max:255',
         'password' => 'required|string|min:8',
