@@ -26,6 +26,14 @@ export default function Signup() {
       return;
     }
     setError(null);
+
+    if(!data?.cookie) {
+      setError("500 Error in server");
+      return;
+    }
+    
+    // should be refactored to https cookies
+    localStorage.setItem('cookie',data.cookie);
   };
 
   return (
