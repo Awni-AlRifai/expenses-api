@@ -5,6 +5,7 @@ import FormAction from "./FormAction";
 import { loginUser } from "@/services/Athentication";
 import ErrorMessage from "./ErrorMessage";
 import generateError from "@/utils/generateError";
+import storeToken from "@/utils/storeToken";
 
 const fields = loginFields;
 let fieldsState = {};
@@ -28,14 +29,14 @@ export default function LoginForm() {
       return;
     }
     setError(null);
+    console.log(data);
     // if there is no cookie the user is not signed in
-    if(!data?.cookie) {
+    if(!data?.token) {
       setError("500 Error in server");
       return;
     }
-    
-    // should be refactored to https cookies
-    localStorage.setItem('cookie',data.cookie)
+
+    storeToken(data.token);
     
   };
 

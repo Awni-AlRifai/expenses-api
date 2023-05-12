@@ -1,5 +1,6 @@
 import { signupUser } from "@/services/Athentication";
 import generateError from "@/utils/generateError";
+import storeToken from "@/utils/storeToken";
 import { useState } from "react";
 import { signupFields } from "../constants/formFields";
 import ErrorMessage from "./ErrorMessage";
@@ -31,9 +32,7 @@ export default function Signup() {
       setError("500 Error in server");
       return;
     }
-    
-    // should be refactored to https cookies
-    localStorage.setItem('cookie',data.cookie);
+    storeToken(data.token);
   };
 
   return (
