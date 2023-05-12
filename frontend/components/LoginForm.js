@@ -23,8 +23,7 @@ export default function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(loginState);
+    
     const data = await loginUser(loginState);
     if (data?.errors || data?.message) {
       generateError(data, setError);

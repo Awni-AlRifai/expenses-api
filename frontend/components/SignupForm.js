@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { signupUser } from "@/services/Athentication";
 import generateError from "@/utils/generateError";
 import storeToken from "@/utils/storeToken";
@@ -13,6 +14,8 @@ let fieldsState = {};
 fields.forEach((field) => (fieldsState[field.id] = ""));
 
 export default function Signup() {
+
+  const router = useRouter();
   const [signupState, setSignupState] = useState(fieldsState);
   const [error, setError] = useState(null);
 
@@ -28,10 +31,11 @@ export default function Signup() {
     }
     setError(null);
 
-    if (!data?.cookie) {
+    if (!data?.token) {
       setError("500 Error in server");
       return;
     }
+
     storeToken(data.token);
 
     // Redirect to the dashboard
