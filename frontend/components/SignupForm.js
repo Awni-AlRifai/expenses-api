@@ -28,11 +28,14 @@ export default function Signup() {
     }
     setError(null);
 
-    if(!data?.cookie) {
+    if (!data?.cookie) {
       setError("500 Error in server");
       return;
     }
     storeToken(data.token);
+
+    // Redirect to the dashboard
+    router.push("/");
   };
 
   return (

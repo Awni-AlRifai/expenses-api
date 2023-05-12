@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { loginFields } from "../constants/formFields";
 import Input from "./Input";
 import FormAction from "./FormAction";
@@ -12,6 +13,7 @@ let fieldsState = {};
 fields.forEach((field) => (fieldsState[field.id] = ""));
 
 export default function LoginForm() {
+  const router = useRouter();
   const [loginState, setLoginState] = useState(fieldsState);
   const [error, setError] = useState(null);
 
@@ -31,15 +33,16 @@ export default function LoginForm() {
     setError(null);
     console.log(data);
     // if there is no cookie the user is not signed in
-    if(!data?.token) {
+    if (!data?.token) {
       setError("500 Error in server");
       return;
     }
 
     storeToken(data.token);
-    
-  };
 
+    // Redirect to the dashboard
+    router.push("/");
+  };
 
   return (
     <form className="mt-8 space-y-6">
@@ -60,7 +63,7 @@ export default function LoginForm() {
         ))}
       </div>
       <FormAction handleSubmit={handleSubmit} text="login" />
-      <ErrorMessage message={error}/>
+      <ErrorMessage message={error} />
     </form>
   );
 }
