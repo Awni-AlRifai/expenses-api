@@ -10,6 +10,9 @@ use Illuminate\Validation\ValidationException;
 
 //export the validation and authentication into separate classes
 Route::post('register', function (Request $request) {
+
+    // adding try and catch to handle validation exception
+    // should be refactored and exported outside the controller
     try {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -73,3 +76,21 @@ Route::middleware('auth:sanctum')->group(function () {
     // Delete a specific category for authenticated user
     Route::delete('/categories/{category}', 'App\Http\Controllers\CategoryController@destroy');
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Get all expenses for authenticated user
+    Route::get('/expenses', 'App\Http\Controllers\ExpenseController@index');
+
+    // Create a new expense for authenticated user
+    Route::post('/expenses', 'App\Http\Controllers\ExpenseController@store');
+
+    // Get a specific expense for authenticated user
+    Route::get('/expenses/{expense}', 'App\Http\Controllers\ExpenseController@show');
+
+    // Update a specific expense for authenticated user
+    Route::put('/expenses/{expense}', 'App\Http\Controllers\ExpenseController@update');
+
+    // Delete a specific expense for authenticated user
+    Route::delete('/expenses/{expense}', 'App\Http\Controllers\ExpenseController@destroy');
+});
+
