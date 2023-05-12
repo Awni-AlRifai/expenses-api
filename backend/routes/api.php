@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
 
+
+//export the validation and authentication into separate classes
 Route::post('register', function (Request $request) {
     try {
         $validatedData = $request->validate([
@@ -54,4 +56,20 @@ Route::post('login', function (Request $request) {
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+Route::middleware('auth:sanctum')->group(function () {
+    // Get all categories for authenticated user
+    Route::get('/categories', 'App\Http\Controllers\CategoryController@index');
+
+    // Create a new category for authenticated user
+    Route::post('/categories', 'App\Http\Controllers\CategoryController@store');
+
+    // Get a specific category for authenticated user
+    Route::get('/categories/{category}', 'App\Http\Controllers\CategoryController@show');
+
+    // Update a specific category for authenticated user
+    Route::put('/categories/{category}', 'App\Http\Controllers\CategoryController@update');
+
+    // Delete a specific category for authenticated user
+    Route::delete('/categories/{category}', 'App\Http\Controllers\CategoryController@destroy');
 });
