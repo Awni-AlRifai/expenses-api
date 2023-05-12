@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { signupUser } from "@/services/Athentication";
+import { signupUser } from "@/services/athentication";
 import generateError from "@/utils/generateError";
 import storeToken from "@/utils/storeToken";
 import { useState } from "react";

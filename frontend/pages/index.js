@@ -1,4 +1,4 @@
-import { getUserData } from "@/serverUtils/UserService";
+import { getUserData } from "@/serverUtils/userService";
 import { redirectToLoginPage } from "@/utils/redirect";
 import React from "react";
 

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { loginFields } from "../constants/formFields";
 import Input from "./Input";
 import FormAction from "./FormAction";
-import { loginUser } from "@/services/Athentication";
+import { loginUser } from "@/services/athentication";
 import ErrorMessage from "./ErrorMessage";
 import generateError from "@/utils/generateError";
 import storeToken from "@/utils/storeToken";
