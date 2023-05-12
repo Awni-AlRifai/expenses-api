@@ -14,6 +14,8 @@ export const get = async (url, headers = {}) => {
         ...headers,
       },
     });
+    
+    if(!response?.ok) return false;
 
     return response.json();
   } catch (err) {
