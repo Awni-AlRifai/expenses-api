@@ -1,6 +1,6 @@
-function generateError({ errors }, setError) {
+function generateError({ errors, message}, setError) {
   // Get all error messages as an array
-  const errorMessages = Object.entries(errors).reduce(
+  const errorMessages = Object.entries(errors || message).reduce(
     (acc, [key, value]) => [...acc, ...value],
     []
   );

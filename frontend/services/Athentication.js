@@ -17,3 +17,8 @@ export const signupUser = async ({
 
   return data;
 };
+
+export const loginUser = async (loginData) => {
+  const data = await post(`${BACKEND_URL}/login`, loginData);
+  return data;
+};

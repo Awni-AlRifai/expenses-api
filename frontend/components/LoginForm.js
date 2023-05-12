@@ -2,6 +2,9 @@ import { useState } from "react";
 import { loginFields } from "../constants/formFields";
 import Input from "./Input";
 import FormAction from "./FormAction";
+import { loginUser } from "@/services/Athentication";
+import ErrorMessage from "./ErrorMessage";
+import generateError from "@/utils/generateError";
 
 const fields = loginFields;
 let fieldsState = {};
@@ -9,18 +12,33 @@ fields.forEach((field) => (fieldsState[field.id] = ""));
 
 export default function LoginForm() {
   const [loginState, setLoginState] = useState(fieldsState);
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setLoginState({ ...loginState, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    authenticateUser();
+
+    console.log(loginState);
+    const data = await loginUser(loginState);
+    if (data?.errors || data?.message) {
+      generateError(data, setError);
+      return;
+    }
+    setError(null);
+    // if there is no cookie the user is not signed in
+    if(!data?.cookie) {
+      setError("500 Error in server");
+      return;
+    }
+    
+    // should be refactored to https cookies
+    localStorage.setItem('cookie',data.cookie)
+    
   };
 
-  //Handle Login API Integration here
-  const authenticateUser = () => {};
 
   return (
     <form className="mt-8 space-y-6">
@@ -40,7 +58,8 @@ export default function LoginForm() {
           />
         ))}
       </div>
-      <FormAction handleSubmit={handleSubmit} text="Signup" />
+      <FormAction handleSubmit={handleSubmit} text="login" />
+      <ErrorMessage message={error}/>
     </form>
   );
 }
