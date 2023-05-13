@@ -2,14 +2,19 @@ import Category from "@/components/Category";
 import CategoryForm from "@/components/CategoryForm";
 import { getHomePageData } from "@/serverUtils/homeService";
 import { redirectToLoginPage } from "@/utils/redirect";
-import React from "react";
+import React, { useState } from "react";
 
 const Index = ({ data }) => {
+    const [categories,setCategories] = useState(data?.categories ||[]);
+
+    const onAddCategory = (category)=> {
+        setCategories(prev=>[...prev,category.category]);
+    }
   return(
     <div className="container mx-auto my-4">
     <h1 className="text-2xl font-bold mb-4">Categories</h1>
-    <CategoryForm/>
-    <Category categories={data?.categories || []} />
+    <CategoryForm onAddCategory={onAddCategory}/>
+    <Category categories={categories || []} />
   </div>
   )
 };

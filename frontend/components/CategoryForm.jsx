@@ -1,6 +1,7 @@
+import { postCategory } from "@/services/categoryService";
 import { useState } from "react";
 
-function CategoryForm({ onAddCategory }) {
+function CategoryForm({onAddCategory}) {
   const [name, setName] = useState("");
 
   function handleNameChange(event) {
@@ -9,7 +10,9 @@ function CategoryForm({ onAddCategory }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-   
+    const category = await postCategory(name);
+    if(!category) return;
+    onAddCategory(category);
     setName("");
   }
 
