@@ -39,6 +39,47 @@ components:
           example: "new category"
       required:
         - name
+    ExpenseInput:
+      type: object
+      properties:
+        category_id:
+          type: integer
+          format: int64
+        spending_date:
+          type: string
+          format: date
+        amount:
+          type: number
+          format: float
+    Expense:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        category_id:
+          type: integer
+        spending_date:
+          type: string
+          format: date
+        amount:
+          type: number
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - user_id
+        - category_id
+        - spending_date
+        - amount
+        - created_at
+        - updated_at
+
 
 servers:
   - url: http://localhost:8000/api
@@ -352,13 +393,16 @@ paths:
         - bearerAuth: []
       tags:
         - Expenses
-      parameters:
-        - in: body
-          name: body
-          description: Expense object to be added.
-          required: true
-          schema:
-            $ref: "#/definitions/ExpenseInput"
+      produces:
+        - application/json
+      consumes:
+          - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseInput'
       responses:
         201:
           description: Expense created successfully.
@@ -397,6 +441,7 @@ paths:
         401:
           description: Unauthorized.
     delete:
+    
       summary: Delete an expense
       security:
         - bearerAuth: []
@@ -414,34 +459,65 @@ paths:
           description: Expense deleted successfully.
         401:
           description: Unauthorized.
-definitions:
-  Expense:
-    type: object
-    properties:
-      id:
-        type: integer
-      user_id:
-        type: integer
-      category_id:
-        type: integer
-      spending_date:
-        type: string
-        format: date
-      amount:
-        type: number
-      created_at:
-        type: string
-        format: date-time
-      updated_at:
-        type: string
-        format: date-time
-    required:
-      - id
-      - user_id
-      - category_id
-      - spending_date
-      - amount
-      - created_at
-      - updated_at
-  ExpenseInput:
-    type: object
+
+  /expenses/day/{date}:
+    get:
+      summary: Returns all expenses for a given day
+      tags:
+        - Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: date
+          in: path
+          description: The date in YYYY-MM-DD format
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+
+  /expenses/month/{year}/{month}:
+    get:
+      summary: Returns all expenses for a given month
+      tags:
+        - Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: year
+          in: path
+          description: The year in YYYY format
+          required: true
+          schema:
+            type: integer
+        - name: month
+          in: path
+          description: The month in MM format
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+
+  /expenses/year/{year}:
+    get:
+      summary: Returns all expenses for a given year
+      tags:
+        - Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: year
+          in: path
+          description: The year in YYYY format
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+
+  
