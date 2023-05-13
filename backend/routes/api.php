@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::view('/swagger','swagger');
+
 // Authentication routes
 Route::prefix('auth')->group(function () {
     Route::post('register', 'App\Http\Controllers\auth\RegisterController@register');
