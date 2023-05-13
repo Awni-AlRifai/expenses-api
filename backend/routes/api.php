@@ -13,10 +13,8 @@ Route::prefix('auth')->group(function () {
 
 // Routes that require authentication
 Route::middleware('auth:sanctum')->group(function () {
-    // User routes
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    // Home route
+    Route::get('/index', 'App\Http\Controllers\HomeController@index');
 
     // Category routes
     Route::prefix('categories')->group(function () {

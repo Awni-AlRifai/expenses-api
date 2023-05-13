@@ -1,9 +1,17 @@
-import { getUserData } from "@/serverUtils/userService";
+import Category from "@/components/Category";
+import CategoryForm from "@/components/CategoryForm";
+import { getHomePageData } from "@/serverUtils/homeService";
 import { redirectToLoginPage } from "@/utils/redirect";
 import React from "react";
 
-const Index = () => {
-  return <h1>Awni</h1>;
+const Index = ({ data }) => {
+  return(
+    <div className="container mx-auto my-4">
+    <h1 className="text-2xl font-bold mb-4">Categories</h1>
+    <CategoryForm/>
+    <Category categories={data?.categories || []} />
+  </div>
+  )
 };
 export async function getServerSideProps(context) {
   // Check if the user is authenticated
@@ -14,13 +22,13 @@ export async function getServerSideProps(context) {
     return redirectToLoginPage();
   }
 
-  const res = await getUserData(token);
+  const data = await getHomePageData(token);
 
-  if (!res) return redirectToLoginPage();
+  if (!data) return redirectToLoginPage();
 
   return {
     props: {
-      data: res,
+      data,
     },
   };
 }
