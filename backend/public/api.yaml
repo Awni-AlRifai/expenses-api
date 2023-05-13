@@ -139,6 +139,8 @@ paths:
     
     get:
       summary: Get all categories
+      tags:
+        - Categories
       security:
         - bearerAuth: []
       responses:
@@ -178,6 +180,8 @@ paths:
                       updated_at: '2023-05-12T20:02:12.000000Z'
     post:
       summary: Create a new category
+      tags:
+        - Categories
       security:
         - bearerAuth: []
       requestBody:
@@ -233,6 +237,8 @@ paths:
     get:
       summary: Get a category by ID
       description: Returns a category with the specified ID
+      tags:
+        - Categories
       security:
         - bearerAuth: []
       parameters:
@@ -255,6 +261,8 @@ paths:
     put:
       summary: Update a category by ID
       description: Updates a category with the specified ID
+      tags:
+        - Categories
       security:
         - bearerAuth: []
       parameters:
@@ -283,6 +291,8 @@ paths:
     delete:
       summary: Delete a category by ID
       description: Deletes a category with the specified ID
+      tags:
+        - Categories
       security:
         - bearerAuth: []
       parameters:
@@ -297,3 +307,141 @@ paths:
           description: No Content
         404:
           description: Category not found
+  /expenses:
+    get:
+      summary: Get expenses
+      description: Returns a list of all expenses.
+      security:
+        - bearerAuth: []
+      tags:
+        - Expenses
+      parameters:
+        - in: query
+          name: user_id
+          description: ID of the user to filter by.
+          required: false
+          type: integer
+        - in: query
+          name: category_id
+          description: ID of the category to filter by.
+          required: false
+          type: integer
+        - in: query
+          name: spending_date
+          description: Date of the expense to filter by (YYYY-MM-DD format).
+          required: false
+          type: string
+        - in: query
+          name: amount
+          description: Amount of the expense to filter by.
+          required: false
+          type: number
+      responses:
+        200:
+          description: A list of expenses.
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Expense"
+        401:
+          description: Unauthorized.
+    post:
+      summary: Add an expense
+      description: Creates a new expense.
+      security:
+        - bearerAuth: []
+      tags:
+        - Expenses
+      parameters:
+        - in: body
+          name: body
+          description: Expense object to be added.
+          required: true
+          schema:
+            $ref: "#/definitions/ExpenseInput"
+      responses:
+        201:
+          description: Expense created successfully.
+          schema:
+            $ref: "#/definitions/Expense"
+        400:
+          description: Invalid request body.
+        401:
+          description: Unauthorized.
+    put:
+      summary: Update an expense
+      description: Updates an existing expense.
+      security:
+        - bearerAuth: []
+      tags:
+        - Expenses
+      parameters:
+        - in: path
+          name: id
+          description: ID of the expense to update.
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: Expense object to be updated.
+          required: true
+          schema:
+            $ref: "#/definitions/ExpenseInput"
+      responses:
+        200:
+          description: Expense updated successfully.
+          schema:
+            $ref: "#/definitions/Expense"
+        400:
+          description: Invalid request body.
+        401:
+          description: Unauthorized.
+    delete:
+      summary: Delete an expense
+      security:
+        - bearerAuth: []
+      description: Deletes an existing expense.
+      tags:
+        - Expenses
+      parameters:
+        - in: path
+          name: id
+          description: ID of the expense to delete.
+          required: true
+          type: integer
+      responses:
+        204:
+          description: Expense deleted successfully.
+        401:
+          description: Unauthorized.
+definitions:
+  Expense:
+    type: object
+    properties:
+      id:
+        type: integer
+      user_id:
+        type: integer
+      category_id:
+        type: integer
+      spending_date:
+        type: string
+        format: date
+      amount:
+        type: number
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+    required:
+      - id
+      - user_id
+      - category_id
+      - spending_date
+      - amount
+      - created_at
+      - updated_at
+  ExpenseInput:
+    type: object
