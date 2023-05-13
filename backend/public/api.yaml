@@ -136,6 +136,7 @@ paths:
                     type: string
                     example: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjI1MDExZjE2Y2JmZDcxNmU1ZDMwOWJkYjNjODA3Njk2MTJiNTkyNGJlNzNlYzQ5MzNlNzVjNDZiN2E2MTA4Yzk2Mzhh
   /categories:
+    
     get:
       summary: Get all categories
       security:
@@ -232,6 +233,8 @@ paths:
     get:
       summary: Get a category by ID
       description: Returns a category with the specified ID
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -252,6 +255,8 @@ paths:
     put:
       summary: Update a category by ID
       description: Updates a category with the specified ID
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -278,6 +283,8 @@ paths:
     delete:
       summary: Delete a category by ID
       description: Deletes a category with the specified ID
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
