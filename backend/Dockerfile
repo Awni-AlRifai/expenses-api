@@ -35,6 +35,11 @@ RUN chown -R www-data:www-data /var/www/html && \
 # Install composer dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get install -y nodejs
+
+RUN npm install && npm run build
 
 # Enable Apache modules
 RUN a2enmod rewrite
