@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { getCategories } from "@/services/categoryService";
 import {
-  createExpense,
   deleteExpense,
-  updateExpense,
 } from "@/services/expenseService";
 import ExpenseForm from "./ExpensesForm";
 

@@ -4,10 +4,11 @@ import Expense from "@/components/Expenses";
 import ExpenseForm from "@/components/ExpensesForm";
 import { getHomePageData } from "@/serverUtils/homeService";
 import { redirectToLoginPage } from "@/utils/redirect";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const Index = ({ data }) => {
-    console.log(data);
+  console.log(data);
   const [categories, setCategories] = useState(data?.categories || []);
   const [expenses, setExpenses] = useState(data?.expenses || []);
 
@@ -16,12 +17,19 @@ const Index = ({ data }) => {
   };
   return (
     <>
+        <h1 className="text-white font-bold text-5xl mb-8">
+          Welcome to the Expenses App
+        </h1>
+        <Link href="/expenses">
+          <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded shadow">
+            View Expenses
+          </button>
+        </Link>
       <div className="container mx-auto my-4">
         <h1 className="text-2xl font-bold mb-4">Categories</h1>
         <CategoryForm onAddCategory={onAddCategory} />
         <Category categories={categories || []} setCategories={setCategories} />
       </div>
-
     </>
   );
 };
