@@ -2,9 +2,15 @@ import React, { useState } from "react";
 import { createExpense, updateExpense } from "@/services/expenseService";
 import ErrorMessage from "./ErrorMessage";
 import generateError from "@/utils/generateError";
+import Link from "next/link";
 
 // This Form needs refactoring to get shared components outside these form and have a create from and edit form
-const ExpenseForm = ({ categories, setExpenses, expense = {}, setEditForm =()=>{} }) => {
+const ExpenseForm = ({
+  categories,
+  setExpenses,
+  expense = {},
+  setEditForm = () => {},
+}) => {
   const [newExpenseAmount, setNewExpenseAmount] = useState(
     expense?.amount || ""
   );
@@ -15,7 +21,7 @@ const ExpenseForm = ({ categories, setExpenses, expense = {}, setEditForm =()=>{
     expense?.spending_date || ""
   );
 
-  const [error,setError] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,11 +37,11 @@ const ExpenseForm = ({ categories, setExpenses, expense = {}, setEditForm =()=>{
       res = await updateExpense(expense.id, newExpense);
       setEditForm(false);
     } else {
-       res = await createExpense(newExpense);
+      res = await createExpense(newExpense);
     }
-    if(res?.errors){
-        generateError(res,setError);
-        return;
+    if (res?.errors) {
+      generateError(res, setError);
+      return;
     }
 
     const cat = categories.filter((cat) => cat.id == newExpense.categoryId);
@@ -50,7 +56,7 @@ const ExpenseForm = ({ categories, setExpenses, expense = {}, setEditForm =()=>{
     setNewExpenseSpendingDate("");
   };
 
-  return (
+  return categories.length != 0 ? (
     <form class="mb-5" onSubmit={handleSubmit}>
       <label className="block mb-2 font-bold text-gray-700">Amount</label>
       <input
@@ -88,10 +94,19 @@ const ExpenseForm = ({ categories, setExpenses, expense = {}, setEditForm =()=>{
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         type="submit"
       >
-       {expense?.id ? "Update Expense" : " Add Expense"}
+        {expense?.id ? "Update Expense" : " Add Expense"}
       </button>
       <ErrorMessage message={error} />
     </form>
+  ) : (
+    <div>
+      You should add a category before you add an expense
+      <Link href="/categories">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded mb-5">
+          Add Category
+        </button>
+      </Link>
+    </div>
   );
 };
 

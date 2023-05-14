@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  deleteExpense,
-} from "@/services/expenseService";
+import { deleteExpense } from "@/services/expenseService";
 import ExpenseForm from "./ExpensesForm";
 
 const Expense = ({ expenses, setExpenses, categories }) => {
@@ -22,7 +20,7 @@ const Expense = ({ expenses, setExpenses, categories }) => {
     setExpense(expense);
   };
 
-  return expenses?.length !== 0 ? (
+  return expenses?.length !== 0 && categories.length !== 0 ? (
     <>
       <table className="w-full table-auto">
         <thead>
@@ -81,7 +79,9 @@ const Expense = ({ expenses, setExpenses, categories }) => {
       )}
     </>
   ) : (
-    <div>There is no category</div>
+    <div>
+       There is no expenses
+    </div>
   );
 };
 

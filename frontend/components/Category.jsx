@@ -1,4 +1,5 @@
 import { deleteCategory, updateCategory } from "@/services/categoryService";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const Category = ({ categories, setCategories }) => {
@@ -36,6 +37,7 @@ const Category = ({ categories, setCategories }) => {
   };
 
   return categories?.length !== 0 ? (
+    <>
     <table className="w-full table-auto">
       <thead>
         <tr>
@@ -91,6 +93,12 @@ const Category = ({ categories, setCategories }) => {
         ))}
       </tbody>
     </table>
+    <Link href="/expenses">
+        <button className="bg-blue-500 mt-5 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded mb-5">
+          Add Expense
+        </button>
+      </Link>
+    </>
   ) : (
     <div>There is no category</div>
   );
