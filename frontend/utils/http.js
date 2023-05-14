@@ -14,8 +14,8 @@ export const get = async (url, headers = {}) => {
         ...headers,
       },
     });
-    
-    if(!response?.ok) return false;
+
+    if (!response?.ok) return false;
 
     return response.json();
   } catch (err) {
@@ -42,16 +42,16 @@ export const post = async (url, data, headers = {}) => {
   }
   return null;
 };
-export const patch = async (url, data, headers = {}) => {
+export const put = async (url, data, headers = {}) => {
   try {
-    console.log(data);
     const response = await fetch(url, {
-      method: "PATCH",
-      mode: "cors",
+      method: "PUT",
       headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
         ...headers,
       },
-      body: data,
+      body: JSON.stringify(data),
     });
 
     return response.json();
@@ -63,7 +63,6 @@ export const patch = async (url, data, headers = {}) => {
 export const deleteRecord = async (url, headers = {}) => {
   const response = await fetch(url, {
     method: "DELETE",
-    mode: "cors",
     headers: {
       ...headers,
     },

@@ -1,6 +1,7 @@
+import { deleteCategory, updateCategory } from "@/services/categoryService";
 import React, { useState } from "react";
 
-const Category = ({ categories }) => {
+const Category = ({ categories, setCategories }) => {
   const [editingCategory, setEditingCategory] = useState(null);
   const [newCategoryName, setNewCategoryName] = useState("");
 
@@ -9,10 +10,25 @@ const Category = ({ categories }) => {
     setNewCategoryName(category.name);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     // Save the updated category name to the server here
+    const cat = categories?.map((cat) => {
+      if (cat.id == editingCategory.id) {
+        cat.name = newCategoryName;
+      }
+      return cat;
+    });
+    setCategories(cat);
+    
+    await updateCategory(editingCategory.id, newCategoryName);
+
     setEditingCategory(null);
   };
+  const deleteCat = async (id)=> {
+    const cat = categories.filter(cat=>cat.id !== id);
+    setCategories(cat);
+    await deleteCategory(id);
+  }
 
   const handleCancelClick = () => {
     setEditingCategory(null);
@@ -65,7 +81,9 @@ const Category = ({ categories }) => {
                   Edit
                 </button>
               )}
-              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 mt-2  rounded">
+              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 mt-2  rounded"
+              onClick={()=>deleteCat(category.id)}
+              >
                 Delete
               </button>
             </td>

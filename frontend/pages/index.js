@@ -14,7 +14,7 @@ const Index = ({ data }) => {
     <div className="container mx-auto my-4">
     <h1 className="text-2xl font-bold mb-4">Categories</h1>
     <CategoryForm onAddCategory={onAddCategory}/>
-    <Category categories={categories || []} />
+    <Category categories={categories || []}  setCategories ={setCategories}/>
   </div>
   )
 };
