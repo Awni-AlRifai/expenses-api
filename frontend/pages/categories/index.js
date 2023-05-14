@@ -1,6 +1,7 @@
 import Category from "@/components/Category";
 import CategoryForm from "@/components/CategoryForm";
 import { getHomePageData } from "@/serverUtils/homeService";
+import { getCategories } from "@/services/categoryService";
 import { redirectToLoginPage } from "@/utils/redirect";
 import React, { useState } from "react";
 
@@ -30,7 +31,7 @@ export async function getServerSideProps(context) {
     return redirectToLoginPage();
   }
 
-  const data = await getHomePageData(token);
+  const data = await getCategories(token);
 
   if (!data) return redirectToLoginPage();
 
