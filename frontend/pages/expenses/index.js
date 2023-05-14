@@ -15,7 +15,7 @@ const Index = ({ expensesData,categories }) => {
       <div className="container mx-auto my-4">
       <h1 className="text-2xl font-bold mb-4">Expenses</h1>
         <ExpenseForm categories={categories.categories} setExpenses={setExpenses}/>
-        <Expense expenses={expenses} setExpenses={setExpenses}/>
+        <Expense categories={categories.categories} expenses={expenses} setExpenses={setExpenses}/>
       </div>
     </>
   );

@@ -1,10 +1,21 @@
 import React, { useState } from "react";
-import { createExpense } from "@/services/expenseService";
+import { createExpense, updateExpense } from "@/services/expenseService";
+import ErrorMessage from "./ErrorMessage";
+import generateError from "@/utils/generateError";
 
-const ExpenseForm = ({ categories, setExpenses }) => {
-  const [newExpenseAmount, setNewExpenseAmount] = useState("");
-  const [newExpenseCategoryId, setNewExpenseCategoryId] = useState("");
-  const [newExpenseSpendingDate, setNewExpenseSpendingDate] = useState("");
+// This Form needs refactoring to get shared components outside these form and have a create from and edit form
+const ExpenseForm = ({ categories, setExpenses, expense = {}, setEditForm =()=>{} }) => {
+  const [newExpenseAmount, setNewExpenseAmount] = useState(
+    expense?.amount || ""
+  );
+  const [newExpenseCategoryId, setNewExpenseCategoryId] = useState(
+    expense?.category?.id || ""
+  );
+  const [newExpenseSpendingDate, setNewExpenseSpendingDate] = useState(
+    expense?.spending_date || ""
+  );
+
+  const [error,setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,12 +26,22 @@ const ExpenseForm = ({ categories, setExpenses }) => {
       categoryId: Number(newExpenseCategoryId) || categories[0].id,
       spendingDate: newExpenseSpendingDate,
     };
-    const expense = await createExpense(newExpense);
-    const cat = categories.filter((cat) => cat.id == newExpense.categoryId);
-    const expenseData = expense.data;
-    expenseData['category'] = cat[0];
+    let res;
+    if (expense?.id) {
+      res = await updateExpense(expense.id, newExpense);
+      setEditForm(false);
+    } else {
+       res = await createExpense(newExpense);
+    }
+    if(res?.errors){
+        generateError(res,setError);
+        return;
+    }
 
-    // Call the onAddExpense function passed in as a prop, passing the new expense object
+    const cat = categories.filter((cat) => cat.id == newExpense.categoryId);
+    const expenseData = res.data;
+    expenseData["category"] = cat[0];
+
     setExpenses((prev) => [expenseData, ...prev]);
 
     // Reset the form values
@@ -67,8 +88,9 @@ const ExpenseForm = ({ categories, setExpenses }) => {
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         type="submit"
       >
-        Add Expense
+       {expense?.id ? "Update Expense" : " Add Expense"}
       </button>
+      <ErrorMessage message={error} />
     </form>
   );
 };

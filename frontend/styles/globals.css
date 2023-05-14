@@ -2,11 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-.bg-gradient {
-    background: linear-gradient(to bottom, #c5b7f1, #d2b3e9);
-  }
-
-  .bg-blur {
-    backdrop-filter: blur(1px);
+body{
+  background: linear-gradient(to bottom, #c5b7f1, #d2b3e9);
+  backdrop-filter: blur(1px);
     -webkit-backdrop-filter: blur(1px); /* Safari support */
-  }
+}
+ 

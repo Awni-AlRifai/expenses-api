@@ -5,34 +5,11 @@ import {
   deleteExpense,
   updateExpense,
 } from "@/services/expenseService";
+import ExpenseForm from "./ExpensesForm";
 
-const Expense = ({ expenses, setExpenses }) => {
-  const [editingExpense, setEditingExpense] = useState(null);
-  console.log(expenses);
-
-  const handleEditClick = (expense) => {
-    setEditingExpense(expense);
-  };
-
-  const handleSaveClick = async () => {
-    // Save the updated expense to the server here
-    try {
-      if (editingExpense) {
-        await updateExpense(editingExpense.id, newExpense);
-        setExpenses(
-          expenses.map((expense) =>
-            expense.id === editingExpense.id ? newExpense : expense
-          )
-        );
-      } else {
-        const response = await createExpense(newExpense);
-        setExpenses([...expenses, response.data]);
-      }
-      setEditingExpense(null);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const Expense = ({ expenses, setExpenses, categories }) => {
+  const [editForm, setEditForm] = useState(false);
+  const [expense, setExpense] = useState({});
 
   const deleteExpenseHandler = async (expenseId) => {
     // Delete the expense from the server and remove it from the state
@@ -43,42 +20,69 @@ const Expense = ({ expenses, setExpenses }) => {
       console.log(error);
     }
   };
+  const handleEdit = (expense) => {
+    setEditForm(true);
+    setExpense(expense);
+  };
+
   return expenses?.length !== 0 ? (
-    <table className="w-full table-auto">
-      <thead>
-        <tr>
-          <th className="border px-4 py-2">Category</th>
-          <th className="border px-4 py-2">Date</th>
-          <th className="border px-4 py-2">Amount</th>
-          <th className="border px-4 py-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {expenses?.map((expense) => (
-          <tr key={expense.id}>
-            <td className="border px-4 py-2">
-              {expense.category?.name || "No category"}
-            </td>
-            <td className="border px-4 py-2">{expense.spending_date}</td>
-            <td className="border px-4 py-2">{expense.amount}</td>
-            <td className="border px-4 py-2 text-center">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
-                onClick={() => handleEditClick(expense)}
-              >
-                Edit
-              </button>
-              <button
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 mt-2  rounded"
-                onClick={() => deleteExpenseHandler(expense.id)}
-              >
-                Delete
-              </button>
-            </td>
+    <>
+      <table className="w-full table-auto">
+        <thead>
+          <tr>
+            <th className="border px-4 py-2">Category</th>
+            <th className="border px-4 py-2">Date</th>
+            <th className="border px-4 py-2">Amount</th>
+            <th className="border px-4 py-2">Actions</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {expenses?.map((exp) => (
+            <tr key={exp.id}>
+              <td className="border px-4 py-2">
+                {exp.category?.name || "No category"}
+              </td>
+              <td className="border px-4 py-2">{exp.spending_date}</td>
+              <td className="border px-4 py-2">{exp.amount}</td>
+              <td className="border px-4 py-2 text-center">
+                {editForm && exp.id == expense.id ? (
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
+                    onClick={() => setEditForm(false)}
+                  >
+                    cancel
+                  </button>
+                ) : (
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
+                    onClick={() => handleEdit(exp)}
+                  >
+                    Edit
+                  </button>
+                )}
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 mt-2  rounded"
+                  onClick={() => deleteExpenseHandler(exp.id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {editForm && (
+        <div className="mt-5 ">
+          <h1 className="text-xl font-bold mb-4">Edit the expense here</h1>
+          <ExpenseForm
+            categories={categories}
+            setExpenses={setExpenses}
+            expense={expense}
+            setEditForm={setEditForm}
+          />
+        </div>
+      )}
+    </>
   ) : (
     <div>There is no category</div>
   );
