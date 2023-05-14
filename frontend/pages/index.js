@@ -1,56 +1,35 @@
 import Category from "@/components/Category";
 import CategoryForm from "@/components/CategoryForm";
-import Expense from "@/components/Expenses";
-import ExpenseForm from "@/components/ExpensesForm";
 import { getHomePageData } from "@/serverUtils/homeService";
 import { redirectToLoginPage } from "@/utils/redirect";
 import Link from "next/link";
 import React, { useState } from "react";
 
-const Index = ({ data }) => {
-  console.log(data);
-  const [categories, setCategories] = useState(data?.categories || []);
-  const [expenses, setExpenses] = useState(data?.expenses || []);
-
-  const onAddCategory = (category) => {
-    setCategories((prev) => [...prev, category.category]);
-  };
+const Index = () => {
   return (
     <>
-        <h1 className="text-white font-bold text-5xl mb-8">
-          Welcome to the Expenses App
-        </h1>
-        <Link href="/expenses">
-          <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded shadow">
-            View Expenses
-          </button>
-        </Link>
-      <div className="container mx-auto my-4">
-        <h1 className="text-2xl font-bold mb-4">Categories</h1>
-        <CategoryForm onAddCategory={onAddCategory} />
-        <Category categories={categories || []} setCategories={setCategories} />
-      </div>
+     <div className="flex flex-col items-center justify-center h-screen">
+  <div className="bg-white rounded-lg shadow-lg p-8">
+    <h1 className="text-gray-800 font-bold text-5xl mb-8">
+      Welcome to the Expenses App
+    </h1>
+    <div className="flex justify-center space-x-4">
+      <Link href="/expenses">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+          View Expenses
+        </button>
+      </Link>
+      <Link href="/categories">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+          View Categories
+        </button>
+      </Link>
+    </div>
+  </div>
+</div>
+
     </>
   );
 };
-export async function getServerSideProps(context) {
-  // Check if the user is authenticated
-  const { token } = context.req.cookies;
-
-  if (!token) {
-    // If the user is not authenticated, redirect them to the login page
-    return redirectToLoginPage();
-  }
-
-  const data = await getHomePageData(token);
-
-  if (!data) return redirectToLoginPage();
-
-  return {
-    props: {
-      data,
-    },
-  };
-}
 
 export default Index;
