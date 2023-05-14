@@ -61,7 +61,6 @@ class ExpenseController extends Controller
 
     public function update(Request $request, Expense $expense)
     {
-        $this->authorize('update', $expense);
 
         $validatedData = $request->validate([
             'category_id' => 'exists:categories,id',
@@ -91,7 +90,6 @@ class ExpenseController extends Controller
 
     public function destroy(Expense $expense)
     {
-        $this->authorize('delete', $expense);
 
         $expense->delete();
 
@@ -101,30 +99,31 @@ class ExpenseController extends Controller
     }
 
     public function indexByDay(Request $request)
-    {
-        $expenses = Expense::where('user_id', auth()->user()->id)
-            ->whereDate('spending_date', $request->date)
-            ->get();
+{
+    $expenses = Expense::where('user_id', auth()->user()->id)
+                ->whereDate('spending_date', $request->date)
+                ->get();
 
-        return response()->json(['expenses' => $expenses]);
-    }
+    return response()->json(['expenses' => $expenses]);
+}
 
-    public function indexByMonth(Request $request)
-    {
-        $expenses = Expense::where('user_id', auth()->user()->id)
-            ->whereYear('spending_date', $request->year)
-            ->whereMonth('spending_date', $request->month)
-            ->get();
+public function indexByMonth(Request $request)
+{
+    $expenses = Expense::where('user_id', auth()->user()->id)
+                ->whereYear('spending_date', $request->year)
+                ->whereMonth('spending_date', $request->month)
+                ->get();
 
-        return response()->json(['expenses' => $expenses]);
-    }
+    return response()->json(['expenses' => $expenses]);
+}
 
-    public function indexByYear(Request $request)
-    {
-        $expenses = Expense::where('user_id', auth()->user()->id)
-            ->whereYear('spending_date', $request->year)
-            ->get();
+public function indexByYear(Request $request)
+{
+    $expenses = Expense::where('user_id', auth()->user()->id)
+                ->whereYear('spending_date', $request->year)
+                ->get();
 
-        return response()->json(['expenses' => $expenses]);
-    }
+    return response()->json(['expenses' => $expenses]);
+}
+
 }
