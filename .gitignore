@@ -2,7 +2,6 @@
 /backend/node_modules
 /backend/.phpunit.cache
 /backend/.phpunit.result.cache
-/backend/.env
 /backend/.env.*
 /backend/.DS_Store
 /backend/npm-debug.log
